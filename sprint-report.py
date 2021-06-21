@@ -364,13 +364,13 @@ def get_heading(wbname,wsheet):
 
 def get_cell_formulae(wbname, dst_wname):
     wb = load_workbook(wbname)
-    dwsheet = wb.get_sheet_by_name(wsheet)
+    dwsheet = wb.get_sheet_by_name(dst_wname)
     dwsheet['M3'].value = "=J3-L3"
     dwsheet['P3'].value = "=J3/L3*100"
     drcount = dwsheet.max_row
     dccount = dwsheet.max_column
     for i in range(3, drcount + 1):
-		dwsheet['L' + str(i)].value = "=" + "K" + str(i) + "/" + "3600"
+        dwsheet['L' + str(i)].value = "=" + "K" + str(i) + "/" + "3600"
         dwsheet['M' + str(i)].value = "=" + "J" + str(i) + "-" + "L" + str(i) 
         dwsheet['P' + str(i)].value = "=" + "J" + str(i) + "/" + "L" + str(i) + "%" 
         
@@ -390,7 +390,7 @@ def main():
     get_col_names_and_values(filename, stories_data, epics_data, dst_wname)
     get_cell_colors_using_patternfill(filename, dst_wname)
     get_heading(filename, dst_wname)
-	get_cell_formulae(filename, dst_wname)
+    get_cell_formulae(filename, dst_wname)
 if (__name__ == '__main__'):
     main()
 
