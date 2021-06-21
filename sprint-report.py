@@ -372,7 +372,7 @@ def get_cell_formulae(wbname, dst_wname):
     for i in range(3, drcount + 1):
         dwsheet['L' + str(i)].value = "=" + "K" + str(i) + "/" + "3600"
         dwsheet['M' + str(i)].value = "=" + "J" + str(i) + "-" + "L" + str(i) 
-        dwsheet['P' + str(i)].value = "=" + "J" + str(i) + "/" + "L" + str(i) + "%" 
+        dwsheet['P' + str(i)].value = "=" + "L" + str(i) + "/" + "J" + str(i) + "%" 
         
     wb.save(wbname)
 
