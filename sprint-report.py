@@ -143,7 +143,7 @@ def create_worksheet(wbname, dst_wname):
         dwsheet = wb.create_sheet(dst_wname,0)
 	
     wb.save(wbname)
-def print_row_column1(wbname,stories,epics,dst_wname):
+def get_col_names_and_values(wbname,stories,epics,dst_wname):
     dates_list = []
     sprint_list = []		
     wb = load_workbook(wbname)
@@ -278,10 +278,12 @@ def print_row_column1(wbname,stories,epics,dst_wname):
         pending_effort_hours = estimate_effort_hours - effort_consumed_hours
         dwsheet[j][sprint2_pos].value = pending_effort_hours
         dwsheet[j][sprint2_pos].alignment = center_aligned_text
+        dwsheet['M3'] = "=J3-L3"
 
         effort_completion = (effort_consumed_hours/estimate_effort_hours) * 100
         dwsheet[j][progress_pos].value = ('{}{}'.format(round(effort_completion),"%"))
         dwsheet[j][progress_pos].alignment = center_aligned_text
+        dwsheet['P2'].value = "=L3/J3*100" 
 
         scheduled_progress = 100
         dwsheet[j][scheduled_progress_pos].value = ('{}{}'.format(scheduled_progress,"%"))
@@ -329,6 +331,38 @@ def print_row_column1(wbname,stories,epics,dst_wname):
     wb.save("employee-details.xlsx")
     wb.save(wbname)
 
+def get_cell_colors_using_patternfill(wbook, wsheet):
+    wb = load_workbook(wbook)
+    dwsheet = wb.get_sheet_by_name(wsheet)
+
+    rcount = dwsheet.max_row
+    ccount = dwsheet.max_column
+    
+    #print(dir(PatternFill))
+    
+    fill_pattern = PatternFill(patternType = 'solid', fgColor = 'CCCCFF')
+    for i in range(0, ccount):
+        dwsheet[1][i].fill = fill_pattern
+    
+    
+    wb.save(wbook)
+
+def get_heading(wbook,wsheet):
+    wb = load_workbook(wbook)
+    dwsheet = wb.get_sheet_by_name(wsheet)
+    
+    min = dwsheet.min_column
+    max = dwsheet.max_column
+    dwsheet.insert_rows(1)
+    dwsheet['A1'].value = "SPRINT/STORY BOARD"
+    dwsheet.merge_cells('A1:S1')
+    dwsheet['A1'].alignment = Alignment(horizontal = "center", vertical = "center") 
+    
+    fill_pattern = PatternFill(patternType = 'solid', fgColor = 'FFFF00')
+    dwsheet['A1'].fill = fill_pattern
+    wb.save(wbook)
+
+
 
 def main():
     filename = "employee-details.xlsx"
@@ -340,8 +374,9 @@ def main():
     stories_data = get_read_csv_files(stories)
     create_worksheet(filename, dst_wname)
     #print_all_worksheet_names(filename)
-    print_row_column1(filename, stories_data, epics_data, dst_wname)
-
+    get_col_names_and_values(filename, stories_data, epics_data, dst_wname)
+    get_cell_colors_using_patternfill(filename, dst_wname)
+    get_heading(filename, dst_wname)
 if (__name__ == '__main__'):
     main()
 
