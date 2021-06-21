@@ -331,8 +331,8 @@ def get_col_names_and_values(wbname,stories,epics,dst_wname):
     wb.save("employee-details.xlsx")
     wb.save(wbname)
 
-def get_cell_colors_using_patternfill(wbook, wsheet):
-    wb = load_workbook(wbook)
+def get_cell_colors_using_patternfill(wbname, wsheet):
+    wb = load_workbook(wbname)
     dwsheet = wb.get_sheet_by_name(wsheet)
 
     rcount = dwsheet.max_row
@@ -345,10 +345,10 @@ def get_cell_colors_using_patternfill(wbook, wsheet):
         dwsheet[1][i].fill = fill_pattern
     
     
-    wb.save(wbook)
+    wb.save(wbname)
 
-def get_heading(wbook,wsheet):
-    wb = load_workbook(wbook)
+def get_heading(wbname,wsheet):
+    wb = load_workbook(wbname)
     dwsheet = wb.get_sheet_by_name(wsheet)
     
     min = dwsheet.min_column
@@ -360,8 +360,21 @@ def get_heading(wbook,wsheet):
     
     fill_pattern = PatternFill(patternType = 'solid', fgColor = 'FFFF00')
     dwsheet['A1'].fill = fill_pattern
-    wb.save(wbook)
+    wb.save(wbname)
 
+def get_cell_formulae(wbname, dst_wname):
+    wb = load_workbook(wbname)
+    dwsheet = wb.get_sheet_by_name(dst_wname)
+    dwsheet['M3'].value = "=J3-L3"
+    dwsheet['P3'].value = "=J3/L3*100"
+    drcount = dwsheet.max_row
+    dccount = dwsheet.max_column
+    for i in range(3, drcount + 1):
+        dwsheet['L' + str(i)].value = "=" + "K" + str(i) + "/" + "3600"
+        dwsheet['M' + str(i)].value = "=" + "J" + str(i) + "-" + "L" + str(i) 
+        dwsheet['P' + str(i)].value = "=" + "J" + str(i) + "/" + "L" + str(i) + "%" 
+        
+    wb.save(wbname)
 
 
 def main():
@@ -377,6 +390,7 @@ def main():
     get_col_names_and_values(filename, stories_data, epics_data, dst_wname)
     get_cell_colors_using_patternfill(filename, dst_wname)
     get_heading(filename, dst_wname)
+    get_cell_formulae(filename, dst_wname)
 if (__name__ == '__main__'):
     main()
 
