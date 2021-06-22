@@ -1,5 +1,5 @@
-import csv
-from openpyxl import Workbook
+
+from get_functions import create_workbook, get_read_csv_files, create_worksheet
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Fill, colors, PatternFill, Protection, Alignment
 from openpyxl.styles import NamedStyle
@@ -106,43 +106,7 @@ remarks_gen_column_name = columns.get_remarks_gen_column_name()
 sr_debug ("remarks_gen_column_name", remarks_gen_column_name)
 
 
-def create_workbook(wbook):
-   
-    try:
-        wb = load_workbook(wbook)
-        print("Workbook '%s'exists" %(wb))
-    except:
-        print("Creating worksheet: '%s'" %(wbook))
-        wb = Workbook()
 
-    wb.save(wbook)
-
-def get_read_csv_files(file_name):
-    datalist = []
-    fd = open(file_name)
-
-    fname = csv.reader(fd)
-    for row in fname:
-        datalist.append(row)
-    return datalist
-
-def create_worksheet(wbname, dst_wname):
-
-    wb = load_workbook(wbname)
-
-
-    try:
-        dwsheet = wb.get_sheet_by_name(dst_wname)
-        sr_debug ("worksheet '%s' found"%(dst_wname))
-        sr_debug ("removing worksheet:'%s'"%(dst_wname))
-        wb.remove_sheet(dwsheet)
-    except:
-        sr_debug ("worksheet '%s' not found"%(dst_wname))
-    finally:
-        sr_debug ("creating new worksheet:'%s'"%(dst_wname))
-        dwsheet = wb.create_sheet(dst_wname,0)
-	
-    wb.save(wbname)
 def get_col_names_and_values(wbname,stories,epics,dst_wname):
     dates_list = []
     sprint_list = []		
@@ -158,23 +122,11 @@ def get_col_names_and_values(wbname,stories,epics,dst_wname):
     sr_debug ("epics length :%d)"%(srcount2))
     
     dwsheet.insert_cols(1, 18)
-    #drcount =  dwsheet.max_row
-    #dccount =  dwsheet.max_column
-    #sr_debug("%s: max row:col (%d:%d)" % (dst_wname, drcount, dccount))
-    '''
-    row = stories[0]       
-    for frow in row:
-        dwsheet.append(frow)
-    '''
+   
     titles_center_aligned_text = Alignment(horizontal = "center", vertical = "center", wrapText=True)
     center_aligned_text = Alignment(horizontal = "center", vertical = "center")
 
-    '''     
-    dwsheet['A1'] = "sai\ndheeraj"
-    dwsheet['A1'].alignment = Alignment(horizontal = "center", vertical = "center", wrapText=True)
-    #dwsheet['A1'].alignment = center_aligned_text
-    wb.save("wrap.xlsx")
-    '''
+   
 
     header_row = dwsheet[1]
     dwsheet[1][issue_key_pos].value = issue_key_col_name
@@ -386,7 +338,6 @@ def main():
     epics_data = get_read_csv_files(epics)
     stories_data = get_read_csv_files(stories)
     create_worksheet(filename, dst_wname)
-    #print_all_worksheet_names(filename)
     get_col_names_and_values(filename, stories_data, epics_data, dst_wname)
     get_cell_colors_using_patternfill(filename, dst_wname)
     get_heading(filename, dst_wname)
