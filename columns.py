@@ -10,7 +10,7 @@ epics_column_names = {
 }
 
 stories_column_names = {
-    "S.No": {"pos": 0},
+    "S.No": {"pos": 0, "gen_pos": {"column_name": "S.No"}},
     "issue key": {"pos": 1, "gen_pos": {"column_name":"EPIC ID"}},
     "issue id": {"pos": 2, "gen_pos": {"column_name": "SPRINT ID"}},
     "custom field (epic lnk)": {"pos": 3, "gen_pos": {"column_name": "STORY ID"}},
@@ -34,6 +34,8 @@ stories_column_names = {
 
 def get_sno_pos():
     return stories_column_names["S.No"]["pos"]
+def get_sno_column_name():
+    return stories_column_names["S.No"]["gen_pos"]["column_name"]
 
 def get_issue_key_pos():
     return stories_column_names["issue key"]["pos"]
