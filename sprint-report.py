@@ -5,7 +5,7 @@ from openpyxl.styles import NamedStyle
 from columns import get_column_names_and_positions
 from sr_log import sr_log_messages, sr_debug
 
-sno_pos, issue_key_pos, issue_key_col_name, issue_id_pos, issue_id_col_name, custom_field_epiclink_pos, custom_field_epiclink_col_name, ename_pos, ename_col_name, assignee_pos, assignee_col_name, custom_field_storypoints_pos, custom_field_storypoints_col_name,teste_pos, teste_col_name, original_estimate_pos, original_estimate_col_name, time_spent_pos, time_spent_col_name,remaining_estimate_pos, remaining_estimate_col_name, sprint_pos, sprint_col_name, sprint2_pos, sprint2_col_name,sprint3_pos, sprint3_col_name, summary_pos, summary_col_name, epics_custom_field_pos, epics_Esdate_pos, epics_Etdate_pos, epics_EASdate_pos, epics_EAEdate_pos, progress_pos, progress_gen_column_name, scheduled_progress_pos, scheduled_progress_gen_column_name, scheduled_overrun_pos, scheduled_overrun_gen_column_name, remarks_pos, remarks_gen_column_name = get_column_names_and_positions()
+sno_pos,sno_col, issue_key_pos, issue_key_col_name, issue_id_pos, issue_id_col_name, custom_field_epiclink_pos, custom_field_epiclink_col_name, ename_pos, ename_col_name, assignee_pos, assignee_col_name, custom_field_storypoints_pos, custom_field_storypoints_col_name,teste_pos, teste_col_name, original_estimate_pos, original_estimate_col_name, time_spent_pos, time_spent_col_name,remaining_estimate_pos, remaining_estimate_col_name, sprint_pos, sprint_col_name, sprint2_pos, sprint2_col_name,sprint3_pos, sprint3_col_name, summary_pos, summary_col_name, epics_custom_field_pos, epics_Esdate_pos, epics_Etdate_pos, epics_EASdate_pos, epics_EAEdate_pos, progress_pos, progress_gen_column_name, scheduled_progress_pos, scheduled_progress_gen_column_name, scheduled_overrun_pos, scheduled_overrun_gen_column_name, remarks_pos, remarks_gen_column_name = get_column_names_and_positions()
 
 def get_col_names(wbname,dst_wname):  
     wb = load_workbook(wbname)
@@ -13,6 +13,7 @@ def get_col_names(wbname,dst_wname):
     
     dwsheet.insert_cols(1, 18)
     header_row = dwsheet[1]
+    dwsheet[1][sno_pos].value = sno_col
     dwsheet[1][issue_key_pos].value = issue_key_col_name
     dwsheet[1][issue_id_pos].value = issue_id_col_name
     dwsheet[1][custom_field_epiclink_pos].value = custom_field_epiclink_col_name
@@ -65,32 +66,30 @@ def get_values_for_columns(wbname,stories,epics,dst_wname):
     sr_debug ("epics length :%d"%(srcount2))
     for i in range (1, srcount1):
         j = i + 1
-        dwsheet[j][sno_pos].value = stories[i][sno_pos]
+        dwsheet[j][sno_pos].value = int(stories[i][sno_pos])
         dwsheet[j][issue_key_pos].value = stories[i][custom_field_epiclink_pos]
         dwsheet[j][custom_field_epiclink_pos].value = stories[i][issue_key_pos]
         dwsheet[j][ename_pos].value = stories[i][summary_pos]
         dwsheet[j][assignee_pos].value = stories[i][assignee_pos]
-        dwsheet[j][custom_field_storypoints_pos].value = stories[i][custom_field_storypoints_pos]
+        dwsheet[j][custom_field_storypoints_pos].value = int(stories[i][custom_field_storypoints_pos])
         
         estimate_effort_hours = int(stories[i][original_estimate_pos]) / 3600
-        dwsheet[j][time_spent_pos].value = estimate_effort_hours
+        dwsheet[j][time_spent_pos].value = (estimate_effort_hours)
 
-        dwsheet[j][remaining_estimate_pos].value = stories[i][time_spent_pos]
+        dwsheet[j][remaining_estimate_pos].value = int(stories[i][time_spent_pos])
 
         effort_consumed_hours = int(stories[i][time_spent_pos]) / 3600
         dwsheet[j][sprint_pos].value = effort_consumed_hours
 
         pending_effort_hours = estimate_effort_hours - effort_consumed_hours
         dwsheet[j][sprint2_pos].value = pending_effort_hours
-        dwsheet['M3'] = "=J3-L3"
 
         effort_completion = (effort_consumed_hours/estimate_effort_hours) * 100
         dwsheet[j][progress_pos].value = ('{}{}'.format(round(effort_completion),"%"))
-        dwsheet['P2'].value = "=L3/J3*100" 
-
+      
         scheduled_progress = 100
         dwsheet[j][scheduled_progress_pos].value = ('{}{}'.format(scheduled_progress,"%"))
-
+        
         scheduled_overrun = 0
         dwsheet[j][scheduled_overrun_pos].value = ('{}{}'.format(scheduled_overrun,"%"))
 	
