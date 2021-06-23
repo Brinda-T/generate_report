@@ -1,165 +1,18 @@
-import csv
-from openpyxl import Workbook
+from get_functions import create_workbook, get_read_csv_files, create_worksheet
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Fill, colors, PatternFill, Protection, Alignment
 from openpyxl.styles import NamedStyle
-import columns
-import datetime
+from columns import get_column_names_and_positions
 from sr_log import sr_log_messages, sr_debug
 
-sno_pos = columns.get_sno_pos()
-sr_debug("sno_pos", sno_pos)
-#sno_col_name = columns.get_sno_column_name()
-#sr_debug("sno_col_name", sno_col_name)
+sno_pos, issue_key_pos, issue_key_col_name, issue_id_pos, issue_id_col_name, custom_field_epiclink_pos, custom_field_epiclink_col_name, ename_pos, ename_col_name, assignee_pos, assignee_col_name, custom_field_storypoints_pos, custom_field_storypoints_col_name,teste_pos, teste_col_name, original_estimate_pos, original_estimate_col_name, time_spent_pos, time_spent_col_name,remaining_estimate_pos, remaining_estimate_col_name, sprint_pos, sprint_col_name, sprint2_pos, sprint2_col_name,sprint3_pos, sprint3_col_name, summary_pos, summary_col_name, epics_custom_field_pos, epics_Esdate_pos, epics_Etdate_pos, epics_EASdate_pos, epics_EAEdate_pos, progress_pos, progress_gen_column_name, scheduled_progress_pos, scheduled_progress_gen_column_name, scheduled_overrun_pos, scheduled_overrun_gen_column_name, remarks_pos, remarks_gen_column_name = get_column_names_and_positions()
 
-issue_key_pos = columns.get_issue_key_pos()
-sr_debug ("issue_key_pos", issue_key_pos)
-issue_key_col_name = columns.get_issue_key_col_name()
-sr_debug ("issue_key_col_name", issue_key_col_name)
-
-issue_id_pos = columns.get_issue_id_pos()
-sr_debug ("issue_id_pos", issue_id_pos)
-issue_id_col_name = columns.get_issue_id_col_name()
-sr_debug ("issue_id_col_name", issue_id_col_name)
-custom_field_epiclink_pos = columns.get_custom_field_epiclink_pos()
-sr_debug ("custom_field_epiclink_pos", custom_field_epiclink_pos)
-custom_field_epiclink_col_name = columns.get_custom_field_epiclink_col_name()
-sr_debug ("custom_field_epiclink_col_name", custom_field_epiclink_col_name)
-ename_pos = columns.get_ename_pos()
-sr_debug ("ename_pos", ename_pos)
-ename_col_name = columns.get_ename_col_name()
-sr_debug ("ename_col_name", ename_col_name)
-assignee_pos = columns.get_assignee_pos()
-sr_debug ("assignee_pos", assignee_pos)
-assignee_col_name = columns.get_assignee_col_name()
-sr_debug ("assignee_col_name", assignee_col_name)
-custom_field_storypoints_pos = columns.get_custom_field_storypoints_pos()
-sr_debug ("custom_field_storypoints_pos", custom_field_storypoints_pos)
-custom_field_storypoints_col_name = columns.get_custom_field_storypoints_col_name()
-sr_debug ("custom_field_storypoints_col_name", custom_field_storypoints_col_name)
-teste_pos = columns.get_teste_pos()
-sr_debug ("teste_pos", teste_pos)
-teste_col_name = columns.get_teste_col_name()
-sr_debug ("teste_col_name", teste_col_name)
-original_estimate_pos = columns.get_original_estimate_pos()
-sr_debug ("original_estimate_pos", original_estimate_pos)
-original_estimate_col_name = columns.get_original_estimate_col_name()
-sr_debug ("original_estimate_col_name", original_estimate_col_name)
-time_spent_pos = columns.get_time_spent_pos()
-sr_debug ("time_spent_pos", time_spent_pos)
-time_spent_col_name = columns.get_time_spent_col_name()
-sr_debug ("time_spent_col_name", time_spent_col_name)
-remaining_estimate_pos = columns.get_remaining_estimate_pos()
-sr_debug ("remaining_estimate_pos", remaining_estimate_pos)
-remaining_estimate_col_name = columns.get_remaining_estimate_col_name()
-sr_debug ("remaining_estimate_col_name", remaining_estimate_col_name)
-sprint_pos = columns.get_sprint_pos()
-sr_debug ("sprint_pos", sprint_pos)
-sprint_col_name = columns.get_sprint_col_name()
-sr_debug ("sprint_col_name", sprint_col_name)
-sprint2_pos = columns.get_sprint2_pos()
-sr_debug ("sprint2_pos", sprint2_pos)
-sprint2_col_name = columns.get_sprint2_col_name()
-sr_debug ("sprint2_col_name", sprint2_col_name)
-sprint3_pos = columns.get_sprint3_pos()
-sr_debug ("sprint3_pos", sprint3_pos)
-sprint3_col_name = columns.get_sprint3_col_name()
-sr_debug ("sprint3_col_name", sprint3_col_name)
-summary_pos = columns.get_summary_pos()
-sr_debug ("summary_pos", summary_pos)
-summary_col_name = columns.get_summary_col_name()
-sr_debug ("summary_col_name", summary_col_name)
-
-sr_debug ("------------------")
-
-epics_custom_field_pos = columns.get_epics_custom_field_pos()
-sr_debug ("epics_custom_field_pos", epics_custom_field_pos)     
-epics_Esdate_pos = columns.get_epics_Esdate_pos()
-sr_debug ("epics_Esdate_pos", epics_Esdate_pos)
-epics_Etdate_pos = columns.get_epics_Etdate_pos()
-sr_debug ("epics_Etdate_pos", epics_Etdate_pos)
-epics_EASdate_pos = columns.get_epics_EASdate_pos()
-sr_debug ("epics_EASdate_pos", epics_EASdate_pos)
-epics_EAEdate_pos = columns.get_epics_EAEdate_pos()
-sr_debug ("epics_EAEdate_pos", epics_EAEdate_pos)
-
-sr_debug ("--------------------------")
-
-progress_pos = columns.get_progress_pos()
-sr_debug ("progress_pos", progress_pos)
-progress_gen_column_name = columns.get_progress_gen_column_name()
-sr_debug ("progress_gen_column_name", progress_gen_column_name)
-
-scheduled_progress_pos = columns.get_scheduled_progress_pos()
-sr_debug ("scheduled_progress_pos", scheduled_progress_pos)
-scheduled_progress_gen_column_name = columns.get_scheduled_progress_gen_column_name()
-sr_debug ("scheduled_progress_gen_column_name", scheduled_progress_gen_column_name)
-
-scheduled_overrun_pos = columns.get_scheduled_overrun_pos()
-sr_debug ("scheduled_overrun_pos", scheduled_overrun_pos)
-scheduled_overrun_gen_column_name = columns.get_scheduled_overrun_gen_column_name()
-sr_debug ("scheduled_overrun_gen_column_name", scheduled_overrun_gen_column_name)
-
-remarks_pos = columns.get_remarks_pos()
-sr_debug ("remarks_pos", remarks_pos)
-remarks_gen_column_name = columns.get_remarks_gen_column_name()
-sr_debug ("remarks_gen_column_name", remarks_gen_column_name)
-
-
-def create_workbook(wbook):
-   
-    try:
-        wb = load_workbook(wbook)
-        print("Workbook '%s'exists" %(wb))
-    except:
-        print("Creating worksheet: '%s'" %(wbook))
-        wb = Workbook()
-
-    wb.save(wbook)
-
-def get_read_csv_files(file_name):
-    datalist = []
-    fd = open(file_name)
-
-    fname = csv.reader(fd)
-    for row in fname:
-        datalist.append(row)
-    return datalist
-
-def create_worksheet(wbname, dst_wname):
+def get_col_names(wbname,dst_wname):  
     wb = load_workbook(wbname)
-    try:
-        dwsheet = wb.get_sheet_by_name(dst_wname)
-        sr_debug ("worksheet '%s' found"%(dst_wname))
-        sr_debug ("removing worksheet:'%s'"%(dst_wname))
-        wb.remove_sheet(dwsheet)
-    except:
-        sr_debug ("worksheet '%s' not found"%(dst_wname))
-    finally:
-        sr_debug ("creating new worksheet:'%s'"%(dst_wname))
-        dwsheet = wb.create_sheet(dst_wname,0)
-	
-    wb.save(wbname)
-
-def get_col_names_and_values(wbname,stories,epics,dst_wname):
-    dates_list = []
-    sprint_list = []		
-    wb = load_workbook(wbname)
-    dwsheet = wb.get_sheet_by_name(dst_wname)
-
-    srcount1 = len(stories)
-    sr_debug ("stories length :%d)"%(srcount1))
-
-    srcount2 = len(epics)
-    sr_debug ("epics length :%d)"%(srcount2))
+    dwsheet = wb[dst_wname]
     
     dwsheet.insert_cols(1, 18)
-    #drcount =  dwsheet.max_row
-    #dccount =  dwsheet.max_column
-    #sr_debug("%s: max row:col (%d:%d)" % (dst_wname, drcount, dccount))
-       
     header_row = dwsheet[1]
-    #dwsheet[1][sno_pos].value = sno_col_name
     dwsheet[1][issue_key_pos].value = issue_key_col_name
     dwsheet[1][issue_id_pos].value = issue_id_col_name
     dwsheet[1][custom_field_epiclink_pos].value = custom_field_epiclink_col_name
@@ -179,17 +32,37 @@ def get_col_names_and_values(wbname,stories,epics,dst_wname):
     dwsheet['r1'] = scheduled_overrun_gen_column_name
     dwsheet['s1'] = remarks_gen_column_name
 
+    wb.save(wbname)
+
+def get_sprint_value(wbname, stories, dst_wname):
+    
+    sprint_list = []
+    wb = load_workbook(wbname)
+    dwsheet = wb[dst_wname]
+	
+    srcount1 = len(stories)   
     for j in range (1, srcount1):
         i = j + 1
+        
         sprint_list.append(stories[j][sprint_pos])
         sprint_list.append(stories[j][sprint2_pos])
         sprint_list.append(stories[j][sprint3_pos])
         sprint_list = list(filter(None, sprint_list))
         sprint_list.sort(reverse = True)
-        #sr_debug (sprint_list)
         dwsheet[i][issue_id_pos].value = sprint_list[0]
         sprint_list = []
+    wb.save(wbname)
+def get_values_for_columns(wbname,stories,epics,dst_wname):
+    dates_list = []
+   	
+    wb = load_workbook(wbname)
+    dwsheet = wb[dst_wname]
+	
+    srcount1 = len(stories)   
+    sr_debug ("stories length :%d"%(srcount1))
 
+    srcount2 = len(epics)  
+    sr_debug ("epics length :%d"%(srcount2))
     for i in range (1, srcount1):
         j = i + 1
         dwsheet[j][sno_pos].value = stories[i][sno_pos]
@@ -220,8 +93,19 @@ def get_col_names_and_values(wbname,stories,epics,dst_wname):
 
         scheduled_overrun = 0
         dwsheet[j][scheduled_overrun_pos].value = ('{}{}'.format(scheduled_overrun,"%"))
+	
+    wb.save(wbname)
+def get_dates_append(wbname, stories, epics, dst_wname):
+    dates_list = []
+   	
+    wb = load_workbook(wbname)
+    dwsheet = wb[dst_wname]
+	
+    srcount1 = len(stories)   
+    sr_debug ("stories length :%d"%(srcount1))
 
-
+    srcount2 = len(epics)  
+    sr_debug ("epics length :%d"%(srcount2))    
     for k in range (1, srcount2):
         for l in range (1, srcount1):
             i = l + 1
@@ -229,40 +113,41 @@ def get_col_names_and_values(wbname,stories,epics,dst_wname):
             dates_list.append(epics[k][epics_Etdate_pos])
             dates_list.append(epics[k][epics_EASdate_pos])
             dates_list.append(epics[k][epics_EAEdate_pos])
-            dates_list.sort()
 
             if (epics[k][epics_custom_field_pos]):
                 stories[l][custom_field_epiclink_pos]
 
             dwsheet[i][teste_pos].value = (dates_list[0])
-            #sr_debug (dates_list[0])
-            #sr_debug (type(dates_list[0]))
-
             dwsheet[i][original_estimate_pos].value = (dates_list[2])
-
             dwsheet[i][sprint3_pos].value = (dates_list[1])
-
             dwsheet[i][summary_pos].value = (dates_list[3])
-            #sr_debug (dwsheet[l][original_estimate_pos].value)
-
-
-
-    drcount =  dwsheet.max_row
-    dccount =  dwsheet.max_column
-    sr_debug("%s: max row:col (%d:%d)" % (dst_wname, drcount, dccount))
-
+ 
     sr_debug("Saving :%s" % (wbname))
     wb.save("employee-details.xlsx")
     wb.save(wbname)
 
+def get_cell_alignment(wbname, dst_wname):
+    wb = load_workbook(wbname)
+    dwsheet = wb[dst_wname]
+
+    text_alignment_for_column = Alignment(horizontal = "center", vertical = "center", wrapText=True)
+    text_alignment_for_row = Alignment(horizontal = "center", vertical = "center")
+	
+    rcount = dwsheet.max_row
+    ccount = dwsheet.max_column
+	
+    for i in range(2, rcount+1):
+        for j in range(0, ccount):
+            dwsheet[1][j].alignment = text_alignment_for_column
+            dwsheet[i][j].alignment = text_alignment_for_row
+    wb.save(wbname)
+
 def get_cell_colors_using_patternfill(wbname, wsheet):
     wb = load_workbook(wbname)
-    dwsheet = wb.get_sheet_by_name(wsheet)
+    dwsheet = wb[wsheet]
 
     rcount = dwsheet.max_row
     ccount = dwsheet.max_column
-    
-    #print(dir(PatternFill))
     
     fill_pattern = PatternFill(patternType = 'solid', fgColor = 'CCCCFF')
     for i in range(0, ccount):
@@ -272,7 +157,7 @@ def get_cell_colors_using_patternfill(wbname, wsheet):
 
 def text_alignment(wbname, dst_wname):
     wb = load_workbook(wbname)
-    dwsheet = wb.get_sheet_by_name(dst_wname)
+    dwsheet = wb[dst_wname]
 
     row_count = dwsheet.max_row
     column_count = dwsheet.max_column
@@ -289,7 +174,7 @@ def text_alignment(wbname, dst_wname):
 
 def get_heading(wbname,wsheet):
     wb = load_workbook(wbname)
-    dwsheet = wb.get_sheet_by_name(wsheet)
+    dwsheet = wb[wsheet]
     
     min = dwsheet.min_column
     max = dwsheet.max_column
@@ -304,7 +189,7 @@ def get_heading(wbname,wsheet):
 
 def get_cell_formulae(wbname, dst_wname):
     wb = load_workbook(wbname)
-    dwsheet = wb.get_sheet_by_name(dst_wname)
+    dwsheet = wb[dst_wname]
     dwsheet['M3'].value = "=J3-L3"
     dwsheet['P3'].value = "=J3/L3*100"
     drcount = dwsheet.max_row
@@ -326,12 +211,15 @@ def main():
     epics_data = get_read_csv_files(epics)
     stories_data = get_read_csv_files(stories)
     create_worksheet(filename, dst_wname)
-    #print_all_worksheet_names(filename)
-    get_col_names_and_values(filename, stories_data, epics_data, dst_wname)
+    get_col_names(filename, dst_wname)
+    get_sprint_value(filename, stories_data, dst_wname)
+    get_values_for_columns(filename, stories_data, epics_data, dst_wname)
+    get_dates_append(filename, stories_data, epics_data, dst_wname)
+    get_cell_alignment(filename, dst_wname)
     get_cell_colors_using_patternfill(filename, dst_wname)
-    text_alignment(filename, dst_wname)
     get_heading(filename, dst_wname)
     get_cell_formulae(filename, dst_wname)
+	
 if (__name__ == '__main__'):
     main()
 
