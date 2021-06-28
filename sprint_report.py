@@ -2,6 +2,7 @@
 
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill, Alignment
+from openpyxl.formatting.rule import DataBarRule
 from get_functions import create_workbook, get_read_csv_files, create_worksheet
 from columns import get_column_names_and_positions
 from sr_log import sr_debug
@@ -201,6 +202,14 @@ def get_cell_formulae(wbname, dst_wname):
 
     wb_name.save(wbname)
 
+def inserting_data_bar(wbname, dst_wname):
+    """This function defined for adding data-bar to the cells"""
+    wb_name = load_workbook(wbname)
+    dwsheet = wb_name[dst_wname]
+    row_count = dwsheet.max_row
+    data_bar_rule = DataBarRule(start_type='min', end_type='max', color="00CC00")
+    dwsheet.conditional_formatting.add("P3:P" + str(row_count), data_bar_rule)
+    wb_name.save(wbname)
 
 def main():
     """Main function is defined to call all the functions"""
@@ -220,6 +229,7 @@ def main():
     get_cell_colors_using_patternfill(filename, dst_wname)
     get_heading(filename, dst_wname)
     get_cell_formulae(filename, dst_wname)
+    inserting_data_bar(filename, dst_wname)
 
 
 if __name__ == '__main__':
