@@ -12,6 +12,7 @@
     - sr_log
   * Modules required: 
     - openpyxl
+    - csv
   * Main code: 
     - sprint_report
 ### How to Execute:
