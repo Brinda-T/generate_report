@@ -1,4 +1,4 @@
-Progress in the Project:
+PROGRESS ACHEIVED IN THE PROJECT:
 1. So far we have done:
         Taking input as excel sheets and generated an excel sheet. 
 3. Progress we have achieved:
