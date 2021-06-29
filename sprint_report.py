@@ -2,7 +2,7 @@
 
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill, Alignment
-from openpyxl.formatting.rule import DataBarRule
+from openpyxl.formatting.rule import FormatObject, DataBar, Rule
 from get_functions import create_workbook, get_read_csv_files, create_worksheet
 from columns import get_column_names_and_positions
 from sr_log import sr_debug
@@ -207,8 +207,14 @@ def inserting_data_bar(wbname, dst_wname):
     wb_name = load_workbook(wbname)
     dwsheet = wb_name[dst_wname]
     row_count = dwsheet.max_row
-    data_bar_rule = DataBarRule(start_type='min', end_type='max', color="00CC00")
-    dwsheet.conditional_formatting.add("P3:P" + str(row_count), data_bar_rule)
+    first = FormatObject(type='percent')
+    second = FormatObject(type='percent')
+    data_bar = DataBar(cfvo=[first, second], color="FF0000", showValue=None,
+                         minLength=None, maxLength=None)
+    # assign the data bar to a rule
+    rule = Rule(type='dataBar', dataBar=data_bar)
+    dwsheet.conditional_formatting.add("P3:P" + str(row_count), rule)
+
     wb_name.save(wbname)
 
 def main():
