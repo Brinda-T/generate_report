@@ -1,6 +1,6 @@
 # Infomation about generating sprint report
 ### Inputs:
-  * sprint data in csv format
+  * stories data in csv format
   * epics data in csv format
 ### Requirements for the project:
   * Files required:
