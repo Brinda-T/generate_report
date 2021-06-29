@@ -88,16 +88,6 @@ def get_values_for_columns(wbname, stories, dst_wname):
         dwsheet[i+1][REMAINING_ESTIMATE_POS].value = int(stories[i]
                                                          [TIME_SPENT_POS])
 
-        effort_consumed_hours = int(stories[i][TIME_SPENT_POS]) / 3600
-        dwsheet[i+1][SPRINT_POS].value = effort_consumed_hours
-
-        pending_effort_hours = estimate_effort_hours - effort_consumed_hours
-        dwsheet[i+1][SPRINT2_POS].value = pending_effort_hours
-
-        effort_completion = (effort_consumed_hours/estimate_effort_hours) * 100
-        dwsheet[i+1][PROGRESS_POS].value = ('{}{}'.format
-                                            (round(effort_completion), "%"))
-
         scheduled_progress = 100
         dwsheet[i+1][SCHEDULED_PROGRESS_POS].value = ('{}{}'.format
                                                       (scheduled_progress,
