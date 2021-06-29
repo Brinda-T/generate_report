@@ -1,13 +1,5 @@
-Blockers
-	1. "Story Effort completion %" is showing 0%
-	2. What is teste column in stories (H column)
-
-Non Blockers
-	3. Epic Name should be a input
-	4. What if EAEDate is Empty?
-	5. What if below columns are None?
-		Original Estimate
-		Remaining Estimate
-		Time Spent
-	6. What if below columns are contains formula?
-	  Consider only value of the cell
+Issues:
+	1."Story Effort completion %" is showing 0%
+	2. We need to change general date fromat(mm/dd/yyyy) into this format dd/mm/yyyy.
+	3. We are not understanding how to create formulae for "Story schedule progress" and "Story schedule overrun".
+	4. "Story effort completion %" calculation getting more than "100%" because of input values are not perfect.
