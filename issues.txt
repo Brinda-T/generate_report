@@ -3,6 +3,7 @@ Issues:
 	2. We are still working on how to create formulae for "Story schedule progress" and "Story schedule overrun".
 	3. we still working on cell formating.
 	4. "Story effort completion %" calculation getting more than "100%" because of input values are not perfect.
+	
 
 
 
