@@ -1,12 +1,14 @@
 PROGRESS ACHEIVED IN THE PROJECT
-1. So far we have done:
+
+1. What was there before meeting
    * Taking input as excel sheets and generated an excel sheet.
-   * We have caculated values and inserted into cells directly.
-   * We imported dates from epics file comparing Custom field(Epic link). 
-2. Progress we have achieved:
+   * Caculated values and inserted into cells directly.
+   * Imported dates from epics file comparing Custom field(Epic link). 
+
+2. Progress made from last meeting
    * Taking csv files as inputs and generated output in excel format.
    * Inserted data bar in the place of STORY EFFORT COMPLETION % column.
-   * Formulae are inserted in the place of values.
-   * Inserted new row to give Heading.
-   * Filled colors using PatternFill.
+   * Formulae are inserted in the place of caliculated values
+   * Inserted new row to give Headders.
+   * Applying colors to titles
    * Cleared all pylint errors.
